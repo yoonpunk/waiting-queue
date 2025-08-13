@@ -2,6 +2,7 @@ package com.practice.waitingqueue.testdouble;
 
 import com.practice.waitingqueue.domain.entity.WaitingQueue;
 import com.practice.waitingqueue.domain.repository.WaitingQueueRepository;
+import com.practice.waitingqueue.infra.redis.repository.WaitingQueueKeyGenerator;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,12 +11,13 @@ import java.util.PriorityQueue;
 
 public class FakeWaitingQueueRepository implements WaitingQueueRepository {
 
-    private final Map<Long, PriorityQueue<WaitingQueueWithScore>> waitingQueueStore = new HashMap<>();
+    private final Map<String, PriorityQueue<WaitingQueueWithScore>> waitingQueueStore = new HashMap<>();
 
     @Override
     public void save(long itemId, String waitingQueueToken, long score) {
+        final var waitingQueueKey = WaitingQueueKeyGenerator.generate(itemId);
         waitingQueueStore.computeIfAbsent(
-            itemId,
+            waitingQueueKey,
             k -> new PriorityQueue<>(Comparator.comparingLong(entry -> entry.score))
         ).add(new WaitingQueueWithScore(itemId, waitingQueueToken, score));
     }
@@ -25,7 +27,8 @@ public class FakeWaitingQueueRepository implements WaitingQueueRepository {
         long itemId,
         String waitingQueueToken
     ) {
-        final var waitingQueue = waitingQueueStore.get(itemId);
+        final var waitingQueueKey = WaitingQueueKeyGenerator.generate(itemId);
+        final var waitingQueue = waitingQueueStore.get(waitingQueueKey);
 
         if (waitingQueue == null) {
             return Optional.empty();
