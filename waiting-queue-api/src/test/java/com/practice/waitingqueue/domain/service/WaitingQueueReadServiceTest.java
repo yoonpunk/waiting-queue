@@ -2,7 +2,7 @@ package com.practice.waitingqueue.domain.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.practice.waitingqueue.domain.entity.WaitingQueueTokenGenerator;
+import com.practice.waitingqueue.domain.entity.WaitingQueueToken;
 import com.practice.waitingqueue.domain.exception.WaitingQueueNotFoundException;
 import com.practice.waitingqueue.testdouble.FakeWaitingQueueRepository;
 import org.junit.jupiter.api.Assertions;
@@ -13,14 +13,14 @@ class WaitingQueueReadServiceTest {
     @Test
     void 대기열_조회_성공() {
         // given
-        long itemId = 100L;
-        long firstUserId = 1L;
-        String firstToken = WaitingQueueTokenGenerator.generate(firstUserId, itemId);
-        long firstScore = System.currentTimeMillis();
+        final var itemId = 100L;
+        final var firstUserId = 1L;
+        final var firstToken = WaitingQueueToken.generate(firstUserId, itemId);
+        final var firstScore = System.currentTimeMillis();
 
-        long secondUserId = 2L;
-        String secondToken = WaitingQueueTokenGenerator.generate(secondUserId, itemId);
-        long secondScore = System.currentTimeMillis();
+        final var secondUserId = 2L;
+        final var secondToken = WaitingQueueToken.generate(secondUserId, itemId);
+        final var secondScore = System.currentTimeMillis();
 
         final var waitingQueueRepository = new FakeWaitingQueueRepository();
         waitingQueueRepository.save(itemId, firstToken, firstScore);
@@ -28,7 +28,7 @@ class WaitingQueueReadServiceTest {
 
         // when
         final var sut = new WaitingQueueReadService(waitingQueueRepository);
-        final var result = sut.getWaitingQueue(itemId, secondToken);
+        final var result = sut.getWaitingQueue(secondUserId, itemId, secondToken.getValue());
 
         // then
         assertThat(result.getItemId()).isEqualTo(itemId);
@@ -38,17 +38,17 @@ class WaitingQueueReadServiceTest {
     @Test
     void 대기열_조회_실패_존재하지_않음() {
         // given
-        long itemId = 100L;
-        long firstUserId = 1L;
-        String firstToken = WaitingQueueTokenGenerator.generate(firstUserId, itemId);
-        long firstScore = System.currentTimeMillis();
+        final var itemId = 100L;
+        final var firstUserId = 1L;
+        final var firstToken = WaitingQueueToken.generate(firstUserId, itemId);
+        final var firstScore = System.currentTimeMillis();
 
-        long secondUserId = 2L;
-        String secondToken = WaitingQueueTokenGenerator.generate(secondUserId, itemId);
-        long secondScore = System.currentTimeMillis();
+        final var secondUserId = 2L;
+        final var secondToken = WaitingQueueToken.generate(secondUserId, itemId);
+        final var secondScore = System.currentTimeMillis();
 
-        long expectedUser = 3L;
-        String notRegisteredToken = WaitingQueueTokenGenerator.generate(expectedUser, itemId);
+        final var expectedUser = 3L;
+        final var notRegisteredRawToken = WaitingQueueToken.generate(expectedUser, itemId).getValue();
 
         final var waitingQueueRepository = new FakeWaitingQueueRepository();
         waitingQueueRepository.save(itemId, firstToken, firstScore);
@@ -59,7 +59,7 @@ class WaitingQueueReadServiceTest {
 
         Assertions.assertThrows(
             WaitingQueueNotFoundException.class,
-            () -> sut.getWaitingQueue(itemId, notRegisteredToken)
+            () -> sut.getWaitingQueue(expectedUser, itemId, notRegisteredRawToken)
         );
     }
 }

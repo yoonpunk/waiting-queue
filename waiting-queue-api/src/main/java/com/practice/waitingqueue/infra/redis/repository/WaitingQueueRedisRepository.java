@@ -1,6 +1,7 @@
 package com.practice.waitingqueue.infra.redis.repository;
 
 import com.practice.waitingqueue.domain.entity.WaitingQueue;
+import com.practice.waitingqueue.domain.entity.WaitingQueueToken;
 import com.practice.waitingqueue.domain.repository.WaitingQueueRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -14,18 +15,18 @@ public class WaitingQueueRedisRepository implements WaitingQueueRepository {
      private final RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public void save(long itemId, String waitingQueueToken, long score) {
+    public void save(long itemId, WaitingQueueToken waitingQueueToken, long score) {
         final var waitingQueueKey = WaitingQueueKeyGenerator.generate(itemId);
-        redisTemplate.opsForZSet().add(waitingQueueKey, waitingQueueToken, score);
+        redisTemplate.opsForZSet().add(waitingQueueKey, waitingQueueToken.getValue(), score);
     }
 
     @Override
     public Optional<WaitingQueue> findByItemIdAndWaitingQueueToken(
         long itemId,
-        String waitingQueueToken
+        WaitingQueueToken waitingQueueToken
     ) {
         final var waitingQueueKey = WaitingQueueKeyGenerator.generate(itemId);
-        final var rank = redisTemplate.opsForZSet().rank(waitingQueueKey, waitingQueueToken);
+        final var rank = redisTemplate.opsForZSet().rank(waitingQueueKey, waitingQueueToken.getValue());
 
         if (rank == null) {
             return Optional.empty();

@@ -1,14 +1,15 @@
 package com.practice.waitingqueue.domain.repository;
 
 import com.practice.waitingqueue.domain.entity.WaitingQueue;
+import com.practice.waitingqueue.domain.entity.WaitingQueueToken;
 import java.util.Optional;
 
 public interface WaitingQueueRepository {
 
-    void save(long itemId, String waitingQueueToken, long score);
+    void save(long itemId, WaitingQueueToken waitingQueueToken, long score);
 
     Optional<WaitingQueue> findByItemIdAndWaitingQueueToken(
         long itemId,
-        String waitingQueueToken
+        WaitingQueueToken waitingQueueToken
     );
 }

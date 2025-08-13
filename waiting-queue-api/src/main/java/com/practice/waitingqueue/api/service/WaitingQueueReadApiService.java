@@ -12,13 +12,16 @@ public class WaitingQueueReadApiService {
     private final WaitingQueueReadService waitingQueueReadService;
 
     public WaitingQueueGetResponse getWaitingQueue(long userId, long itemId, String waitingQueueToken) {
-        // todo 토큰 유효성 검사하기 추가
+        final var registeredWaitingQueue = waitingQueueReadService.getWaitingQueue(
+            userId,
+            itemId,
+            waitingQueueToken
+        );
 
-        final var registeredQueue = waitingQueueReadService.getWaitingQueue(itemId, waitingQueueToken);
         return WaitingQueueGetResponse.of(
-            registeredQueue.getItemId(),
-            registeredQueue.getWaitingQueueToken(),
-            registeredQueue.getWaitingQueueRank(),
+            registeredWaitingQueue.getItemId(),
+            registeredWaitingQueue.getWaitingQueueToken().getValue(),
+            registeredWaitingQueue.getWaitingQueueRank(),
             false // todo 입장셋 만들고 true/false 적용하기
         );
     }

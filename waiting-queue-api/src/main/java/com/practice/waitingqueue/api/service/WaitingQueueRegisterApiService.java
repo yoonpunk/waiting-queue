@@ -17,7 +17,7 @@ public class WaitingQueueRegisterApiService {
         final var registeredQueue = waitingQueueRegisterService.registerWaitingQueue(userId, itemId);
         return WaitingQueueRegisterResponse.of(
             registeredQueue.getItemId(),
-            registeredQueue.getWaitingQueueToken(),
+            registeredQueue.getWaitingQueueToken().getValue(),
             registeredQueue.getWaitingQueueRank(),
             false // todo 입장셋 만들고 true/false 적용하기
         );
