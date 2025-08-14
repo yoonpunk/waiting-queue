@@ -1,9 +1,9 @@
-package com.practice.waitingqueue.api.controller;
+package com.practice.waitingqueue.presentation.api.controller;
 
-import com.practice.waitingqueue.api.dto.WaitingQueueGetResponse;
-import com.practice.waitingqueue.api.dto.WaitingQueueRegisterResponse;
-import com.practice.waitingqueue.api.service.WaitingQueueReadApiService;
-import com.practice.waitingqueue.api.service.WaitingQueueRegisterApiService;
+import com.practice.waitingqueue.presentation.api.dto.WaitingQueueGetResponse;
+import com.practice.waitingqueue.presentation.api.dto.WaitingQueueRegisterResponse;
+import com.practice.waitingqueue.application.service.WaitingQueueReadApiService;
+import com.practice.waitingqueue.application.service.WaitingQueueRegisterApiService;
 import com.practice.waitingqueue.common.http.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,7 +35,7 @@ public class WaitingQueueController {
             userId,
             itemId
         );
-        return CommonResponse.success(result);
+        return CommonResponse.success(WaitingQueueRegisterResponse.of(result));
     }
 
     /**
@@ -53,6 +53,6 @@ public class WaitingQueueController {
             itemId,
             waitingQueueToken
         );
-        return CommonResponse.success(result);
+        return CommonResponse.success(WaitingQueueGetResponse.of(result));
     }
 }

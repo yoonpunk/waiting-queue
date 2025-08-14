@@ -1,4 +1,4 @@
-package com.practice.waitingqueue.api.handler;
+package com.practice.waitingqueue.presentation.api.handler;
 
 import com.practice.waitingqueue.common.http.CommonResponse;
 import com.practice.waitingqueue.domain.exception.WaitingQueueNotFoundException;

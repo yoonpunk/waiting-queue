@@ -1,12 +1,13 @@
-package com.practice.waitingqueue.api.dto;
+package com.practice.waitingqueue.presentation.api.dto;
 
-import com.practice.waitingqueue.domain.info.WaitingQueueInfo;
+import com.practice.waitingqueue.application.dto.WaitingQueueInfoResult;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor(staticName = "of")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Schema(description = "대기열 등록 요청 결과 DTO")
 public class WaitingQueueRegisterResponse {
 
@@ -22,12 +23,12 @@ public class WaitingQueueRegisterResponse {
     @Schema(description = "현재 주문 가능 여부 (대기열 종료 후 true)", example = "true")
     private final boolean canOrder;
 
-    public static WaitingQueueRegisterResponse of(WaitingQueueInfo waitingQueueInfo) {
+    public static WaitingQueueRegisterResponse of(WaitingQueueInfoResult waitingQueueInfoResult) {
         return new WaitingQueueRegisterResponse(
-            waitingQueueInfo.getItemId(),
-            waitingQueueInfo.getWaitingQueueToken().getValue(),
-            waitingQueueInfo.getWaitingQueueRank(),
-            waitingQueueInfo.isEnteredEntrySet()
+            waitingQueueInfoResult.getItemId(),
+            waitingQueueInfoResult.getWaitingQueueToken().getValue(),
+            waitingQueueInfoResult.getWaitingQueueRank(),
+            waitingQueueInfoResult.isCanOrder()
         );
     }
 }
