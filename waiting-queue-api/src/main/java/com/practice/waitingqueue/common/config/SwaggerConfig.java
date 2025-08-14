@@ -1,4 +1,4 @@
-package com.practice.waitingqueue.config;
+package com.practice.waitingqueue.common.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

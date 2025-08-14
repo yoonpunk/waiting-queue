@@ -32,6 +32,7 @@ subprojects {
 
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-data-redis")
+//        implementation("org.apache.commons:commons-pool2") // lettuce pool 사용 시 추가
         implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
 
