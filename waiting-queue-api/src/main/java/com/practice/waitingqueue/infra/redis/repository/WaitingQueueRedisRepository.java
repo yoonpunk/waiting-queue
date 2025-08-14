@@ -1,7 +1,5 @@
 package com.practice.waitingqueue.infra.redis.repository;
 
-import static com.practice.waitingqueue.infra.redis.repository.WaitingQueueKeyGenerator.WAITING_QUEUE_KEY_PREFIX;
-
 import com.practice.waitingqueue.domain.entity.WaitingQueue;
 import com.practice.waitingqueue.domain.entity.WaitingQueueToken;
 import com.practice.waitingqueue.domain.repository.WaitingQueueRepository;
@@ -19,14 +17,24 @@ import org.springframework.util.CollectionUtils;
 @RequiredArgsConstructor
 public class WaitingQueueRedisRepository implements WaitingQueueRepository {
 
-    public static String WAITING_QUEUE_KEY_FIND_REGEX = WAITING_QUEUE_KEY_PREFIX + "*";
+    /**
+     * 현재 활성화 된 대기열의 아이템 ID를 저장하는 Redis 키입니다. 대기열이 최초 생성될 경우 이 키에 아이템 ID가 추가됩니다.
+     * 레디스에서 제공하는 KEYS 명령어는 블로킹이며, SCAN 명령어는 논블로킹이지만 성능에 영향을 줄 수 있기에 활성화 된 대기열의 아이템 ID를 별도로 관리합니다.
+     * 대기열->입장셋 토큰 이동 스케쥴러에 의해 대기열의 토큰이 모두 제거될 수 있지만 그렇더라도 해당 키에서 아이템 ID를 제거하지 않습니다.
+     * 해당 대기열의 아이템 ID 수를 조회하여 0일 때 제거할 수 있지만, 그때 새로 토큰이 진입할 수 있어 동시성 제어에 어려울 수 있기 떄문입니다.
+     * 따라서, 한 번 활성화 된 대기열의 아이템 ID는 계속해서 이 키에 계속 남아있도록 합니다.
+     */
+    private static final String ACTIVE_WAITING_QUEUES_KEY = "active-waiting-queues";
 
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public WaitingQueueToken save(long itemId, WaitingQueueToken waitingQueueToken, long score) {
         final var waitingQueueKey = WaitingQueueKeyGenerator.generate(itemId);
+
+        redisTemplate.opsForSet().add(ACTIVE_WAITING_QUEUES_KEY, String.valueOf(itemId));
         redisTemplate.opsForZSet().add(waitingQueueKey, waitingQueueToken.getValue(), score);
+
         return waitingQueueToken;
     }
 
@@ -48,14 +56,13 @@ public class WaitingQueueRedisRepository implements WaitingQueueRepository {
     }
 
     public Set<Long> findAllQueueingItemIdList() {
-        final var keys = redisTemplate.keys(WAITING_QUEUE_KEY_FIND_REGEX);
+        final var activeQueueItemIdSet = redisTemplate.opsForSet().members(ACTIVE_WAITING_QUEUES_KEY);
 
-        if (CollectionUtils.isEmpty(keys)) {
+        if (CollectionUtils.isEmpty(activeQueueItemIdSet)) {
             return Collections.emptySet();
         }
 
-        return keys.stream()
-            .map(key -> key.replace(WAITING_QUEUE_KEY_PREFIX, ""))
+        return activeQueueItemIdSet.stream()
             .map(Long::parseLong)
             .collect(Collectors.toUnmodifiableSet());
     }
