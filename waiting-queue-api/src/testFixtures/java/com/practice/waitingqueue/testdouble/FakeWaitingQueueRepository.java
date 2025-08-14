@@ -6,9 +6,13 @@ import com.practice.waitingqueue.domain.repository.WaitingQueueRepository;
 import com.practice.waitingqueue.infra.redis.repository.WaitingQueueKeyGenerator;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.springframework.util.CollectionUtils;
 
 public class FakeWaitingQueueRepository implements WaitingQueueRepository {
 
@@ -51,6 +55,44 @@ public class FakeWaitingQueueRepository implements WaitingQueueRepository {
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public Set<Long> findAllQueueingItemIdList() {
+        return waitingQueueStore.keySet().stream()
+            .map(key -> key.replace(WaitingQueueKeyGenerator.WAITING_QUEUE_KEY_PREFIX, ""))
+            .map(Long::parseLong)
+            .collect(Collectors.toUnmodifiableSet());
+    }
+
+    @Override
+    public List<WaitingQueueToken> findTopRankedWaitingQueueTokenListByItem(long itemId, int rank) {
+        return waitingQueueStore.get(WaitingQueueKeyGenerator.generate(itemId)).stream()
+            .limit(rank)
+            .map(entry -> entry.waitingQueueToken)
+            .toList();
+    }
+
+    @Override
+    public void deleteWaitingQueueTokenListByItemId(
+        long itemId,
+        List<WaitingQueueToken> waitingQueueTokenList
+    ) {
+        if (CollectionUtils.isEmpty(waitingQueueTokenList)) {
+            return;
+        }
+
+        final var waitingQueueKey = WaitingQueueKeyGenerator.generate(itemId);
+        final var waitingQueue = waitingQueueStore.get(waitingQueueKey);
+
+        if (CollectionUtils.isEmpty(waitingQueue)) {
+            return;
+        }
+
+        waitingQueue.removeIf(entry ->
+            waitingQueueTokenList.stream()
+                .anyMatch(token -> token.getValue().equals(entry.waitingQueueToken.getValue()))
+        );
     }
 
     // 내부 클래스로 WaitingQueue의 정보와 정렬을 위한 score 함께 저장

@@ -25,6 +25,10 @@ public class WaitingQueueToken {
         return new WaitingQueueToken(value);
     }
 
+    public static WaitingQueueToken createWithoutValidation(String value) {
+        return new WaitingQueueToken(value);
+    }
+
     /**
      * 대기열 토큰이 올바른 형태인지 검증합니다.
      * 대기열 토큰을 소유하는 유저와 토큰이 속한 대기열의 상품만 확인해도 충분하므로 이 두 가지만 검증합니다.

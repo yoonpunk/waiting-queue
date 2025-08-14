@@ -4,9 +4,11 @@ import com.practice.waitingqueue.domain.entity.WaitingQueueToken;
 import com.practice.waitingqueue.domain.repository.EntrySetRepository;
 import com.practice.waitingqueue.infra.redis.repository.EntrySetKeyGenerator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.util.CollectionUtils;
 
 public class FakeEntrySetRepository implements EntrySetRepository {
 
@@ -20,6 +22,21 @@ public class FakeEntrySetRepository implements EntrySetRepository {
             .add(waitingQueueToken.getValue());
 
         return waitingQueueToken;
+    }
+
+    @Override
+    public List<WaitingQueueToken> saveAllByItemId(
+        long itemId,
+        List<WaitingQueueToken> waitingQueueTokenList
+    ) {
+        if (CollectionUtils.isEmpty(waitingQueueTokenList)) {
+            return Collections.emptyList();
+        }
+
+        waitingQueueTokenList.forEach(
+            waitingQueueToken -> save(itemId, waitingQueueToken)
+        );
+        return waitingQueueTokenList;
     }
 
     @Override
