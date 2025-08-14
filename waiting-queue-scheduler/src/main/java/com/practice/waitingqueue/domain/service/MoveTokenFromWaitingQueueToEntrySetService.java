@@ -17,14 +17,23 @@ public class MoveTokenFromWaitingQueueToEntrySetService {
     private final WaitingQueueRepository waitingQueueRepository;
     private final EntrySetRepository entrySetRepository;
 
+    /**
+     * 대기열에서 입장셋으로 이동할 토큰 개수
+     * 기본값은 5개이며, 설정을 통해 변경할 수 있습니다.
+     * 0개일 때는 대기열에서 토큰을 이동하지 않습니다. (잠시 입장열에 진입을 막는 용도로 사용)
+     */
     private int tokenCountToMove = DEFAULT_TOKEN_COUNT_TO_MOVE;
 
     public void setTokenCountToMove(int tokenCountToMove) {
-        if (tokenCountToMove > 0) {
+        if (tokenCountToMove >= 0) {
             this.tokenCountToMove = tokenCountToMove;
         } else {
-            throw new IllegalArgumentException("토큰 이동 개수는 0보다 커야 합니다.");
+            throw new IllegalArgumentException("토큰 이동 개수는 0이상이어야 합니다.");
         }
+    }
+
+    public int getTokenCountToMove() {
+        return tokenCountToMove;
     }
 
     public void moveWaitingQueueTokens() {

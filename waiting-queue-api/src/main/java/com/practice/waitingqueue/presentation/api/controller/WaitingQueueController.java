@@ -1,10 +1,10 @@
 package com.practice.waitingqueue.presentation.api.controller;
 
-import com.practice.waitingqueue.presentation.api.dto.WaitingQueueGetResponse;
-import com.practice.waitingqueue.presentation.api.dto.WaitingQueueRegisterResponse;
 import com.practice.waitingqueue.application.service.WaitingQueueReadApiService;
 import com.practice.waitingqueue.application.service.WaitingQueueRegisterApiService;
 import com.practice.waitingqueue.common.http.CommonResponse;
+import com.practice.waitingqueue.presentation.api.dto.WaitingQueueGetResponse;
+import com.practice.waitingqueue.presentation.api.dto.WaitingQueueRegisterResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +22,6 @@ public class WaitingQueueController {
     private final WaitingQueueRegisterApiService waitingQueueRegisterApiService;
     private final WaitingQueueReadApiService waitingQueueReadApiService;
 
-    /**
-     * 대기열 등록 API
-     */
     @Operation(summary = "대기열 등록 API")
     @PostMapping("/api/v1/item/{itemId}/waiting-queue")
     public CommonResponse<WaitingQueueRegisterResponse> registerWaitingQueue(
@@ -38,9 +35,6 @@ public class WaitingQueueController {
         return CommonResponse.success(WaitingQueueRegisterResponse.of(result));
     }
 
-    /**
-     * 대기열 등록 조회
-     */
     @Operation(summary = "대기열 조회 API")
     @GetMapping("/api/v1/item/{itemId}/waiting-queue/{waitingQueueToken}")
     public CommonResponse<WaitingQueueGetResponse> getWaitingQueue(

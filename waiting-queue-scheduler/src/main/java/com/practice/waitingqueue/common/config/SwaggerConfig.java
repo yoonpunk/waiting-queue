@@ -12,14 +12,14 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-            .info(new Info().title("Waiting Queue API").version("v1"));
+            .info(new Info().title("Waiting Queue Scheduler Internal API").version("v1"));
     }
 
     @Bean
-    public GroupedOpenApi api() {
+    public GroupedOpenApi internalAdminApi() {
         return GroupedOpenApi.builder()
-            .group("waiting-queue-api")
-            .packagesToScan("com.practice.waitingqueue")
+            .group("waiting-queue-internal-admin-api")
+            .packagesToScan("com.practice.waitingqueue.presentation.api")
             .build();
     }
 }
