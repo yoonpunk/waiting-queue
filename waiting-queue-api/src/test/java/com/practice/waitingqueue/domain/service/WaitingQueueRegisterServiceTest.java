@@ -21,8 +21,10 @@ class WaitingQueueRegisterServiceTest {
         final var result = sut.registerWaitingQueue(userId, itemId);
 
         // then
-        assertThat(result.getItemId()).isEqualTo(itemId);
-        assertThat(result.getWaitingQueueRank()).isEqualTo(1);
+        final var registered = waitingQueueRepository.findByItemIdAndWaitingQueueToken(itemId, result);
+        assertThat(registered).isPresent();
+        assertThat(registered.get().getWaitingQueueToken()).isEqualTo(result);
+        assertThat(registered.get().getWaitingQueueRank()).isEqualTo(1);
     }
 
     @Test
@@ -43,7 +45,9 @@ class WaitingQueueRegisterServiceTest {
         final var result = sut.registerWaitingQueue(expectedUserId, itemId);
 
         // then
-        assertThat(result.getItemId()).isEqualTo(itemId);
-        assertThat(result.getWaitingQueueRank()).isEqualTo(2);
+        final var registered = waitingQueueRepository.findByItemIdAndWaitingQueueToken(itemId, result);
+        assertThat(registered).isPresent();
+        assertThat(registered.get().getWaitingQueueToken()).isEqualTo(result);
+        assertThat(registered.get().getWaitingQueueRank()).isEqualTo(2);
     }
 }

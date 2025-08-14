@@ -15,12 +15,15 @@ public class FakeWaitingQueueRepository implements WaitingQueueRepository {
     private final Map<String, PriorityQueue<WaitingQueueWithScore>> waitingQueueStore = new HashMap<>();
 
     @Override
-    public void save(long itemId, WaitingQueueToken waitingQueueToken, long score) {
+    public WaitingQueueToken save(long itemId, WaitingQueueToken waitingQueueToken, long score) {
         final var waitingQueueKey = WaitingQueueKeyGenerator.generate(itemId);
+
         waitingQueueStore.computeIfAbsent(
             waitingQueueKey,
             k -> new PriorityQueue<>(Comparator.comparingLong(entry -> entry.score))
         ).add(new WaitingQueueWithScore(itemId, waitingQueueToken, score));
+
+        return waitingQueueToken;
     }
 
     @Override

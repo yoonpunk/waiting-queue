@@ -1,11 +1,12 @@
 package com.practice.waitingqueue.api.dto;
 
+import com.practice.waitingqueue.domain.info.WaitingQueueInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor(staticName = "of")
+@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 @Schema(description = "대기열 조회 결과 DTO")
 public class WaitingQueueGetResponse {
 
@@ -20,4 +21,13 @@ public class WaitingQueueGetResponse {
 
     @Schema(description = "현재 주문 가능 여부 (대기열 종료 후 true)", example = "true")
     private final boolean canOrder;
+
+    public static WaitingQueueGetResponse of(WaitingQueueInfo waitingQueueInfo) {
+        return new WaitingQueueGetResponse(
+            waitingQueueInfo.getItemId(),
+            waitingQueueInfo.getWaitingQueueToken().getValue(),
+            waitingQueueInfo.getWaitingQueueRank(),
+            waitingQueueInfo.isEnteredEntrySet()
+        );
+    }
 }

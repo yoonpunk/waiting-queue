@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface WaitingQueueRepository {
 
-    void save(long itemId, WaitingQueueToken waitingQueueToken, long score);
+    WaitingQueueToken save(long itemId, WaitingQueueToken waitingQueueToken, long score);
 
     Optional<WaitingQueue> findByItemIdAndWaitingQueueToken(
         long itemId,

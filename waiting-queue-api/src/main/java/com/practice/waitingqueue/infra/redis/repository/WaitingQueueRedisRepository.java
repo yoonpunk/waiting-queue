@@ -15,9 +15,10 @@ public class WaitingQueueRedisRepository implements WaitingQueueRepository {
      private final RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public void save(long itemId, WaitingQueueToken waitingQueueToken, long score) {
+    public WaitingQueueToken save(long itemId, WaitingQueueToken waitingQueueToken, long score) {
         final var waitingQueueKey = WaitingQueueKeyGenerator.generate(itemId);
         redisTemplate.opsForZSet().add(waitingQueueKey, waitingQueueToken.getValue(), score);
+        return waitingQueueToken;
     }
 
     @Override
