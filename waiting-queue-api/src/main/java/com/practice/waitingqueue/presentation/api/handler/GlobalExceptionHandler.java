@@ -29,8 +29,8 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(value = {WaitingQueueRegisterFailedException.class})
     public CommonResponse<Void> handleWaitingQueueRegisterFailed(WaitingQueueRegisterFailedException e) {
-        log.error(String.format("[WaitingQueueRegisterFailedException] %s", e.getMessage()));
-        return CommonResponse.fail(e.getErrorCode(), e.getErrorCodeMessage());
+        log.warn(String.format("[WaitingQueueRegisterFailedException] %s", e.getMessage()));
+        return CommonResponse.fail(e.getErrorCode().name(), e.getErrorCode().getMessage());
     }
 
     /**

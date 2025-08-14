@@ -1,29 +1,32 @@
 package com.practice.waitingqueue.domain.exception;
 
-import com.practice.waitingqueue.domain.entity.WaitingQueueToken;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 public class WaitingQueueRegisterFailedException extends RuntimeException {
 
     private final Long itemId;
-    private final WaitingQueueToken waitingQueueToken;
-    private final String errorCode = "WAITING_QUEUE_REGISTER_FAILED";
-    private final String errorCodeMessage = "대기열 등록에 실패했습니다.";
+    private final ErrorCode errorCode;
 
-    public WaitingQueueRegisterFailedException(Long itemId, WaitingQueueToken waitingQueueToken) {
-        super(buildMessage(itemId, waitingQueueToken));
+    public WaitingQueueRegisterFailedException(Long itemId, ErrorCode errorCode) {
+        super(errorCode.message);
+        this.errorCode = errorCode;
         this.itemId = itemId;
-        this.waitingQueueToken = waitingQueueToken;
     }
 
-    public WaitingQueueRegisterFailedException(Long itemId, WaitingQueueToken waitingQueueToken, Throwable cause) {
-        super(buildMessage(itemId, waitingQueueToken), cause);
+    public WaitingQueueRegisterFailedException(Long itemId, ErrorCode errorCode, Throwable cause) {
+        super(errorCode.message, cause);
+        this.errorCode = errorCode;
         this.itemId = itemId;
-        this.waitingQueueToken = waitingQueueToken;
     }
 
-    private static String buildMessage(Long itemId, WaitingQueueToken token) {
-        return "WaitingQueue register failed. itemId=" + itemId + ", token=" + token.getValue();
+    @Getter
+    @AllArgsConstructor
+    public
+    enum ErrorCode {
+        ITEM_CANNOT_USE_WAITING_QUEUE("대기열 등록이 더이상 불가한 상품입니다.");
+
+        private final String message;
     }
 }

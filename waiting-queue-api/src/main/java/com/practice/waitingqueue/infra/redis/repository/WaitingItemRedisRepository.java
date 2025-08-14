@@ -2,6 +2,7 @@ package com.practice.waitingqueue.infra.redis.repository;
 
 import com.practice.waitingqueue.domain.entity.WaitingItem;
 import com.practice.waitingqueue.domain.repository.WaitingItemRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -24,8 +25,8 @@ public class WaitingItemRedisRepository implements WaitingItemRepository {
     }
 
     @Override
-    public WaitingItem findByItemId(long itemId) {
+    public Optional<WaitingItem> findByItemId(long itemId) {
         String key = String.valueOf(itemId);
-        return redisTemplate.opsForValue().get(key);
+        return Optional.of(redisTemplate.opsForValue().get(key));
     }
 }
