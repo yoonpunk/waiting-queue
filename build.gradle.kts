@@ -35,6 +35,7 @@ subprojects {
 //        implementation("org.apache.commons:commons-pool2") // lettuce pool 사용 시 추가
         implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
+        implementation("com.opencsv:opencsv:5.9")
 
         compileOnly("org.projectlombok:lombok")
         annotationProcessor("org.projectlombok:lombok")
