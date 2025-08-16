@@ -27,6 +27,13 @@ public class WaitingItemRedisRepository implements WaitingItemRepository {
     @Override
     public Optional<WaitingItem> findByItemId(long itemId) {
         String key = String.valueOf(itemId);
-        return Optional.of(redisTemplate.opsForValue().get(key));
+        final var waitingItem = redisTemplate.opsForValue().get(key);
+
+        if (waitingItem == null) {
+            return Optional.empty();
+        } else {
+            return Optional.of(redisTemplate.opsForValue().get(key));
+        }
+
     }
 }

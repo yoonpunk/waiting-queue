@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {WaitingQueueRegisterFailedException.class})
     public CommonResponse<Void> handleWaitingQueueRegisterFailed(WaitingQueueRegisterFailedException e) {
         final var message = String.format(
-            "[WaitingQueueRegisterFailedException] token: %s",
+            "[WaitingQueueRegisterFailedException] itemId: %s",
             e.getItemId()
         );
 
