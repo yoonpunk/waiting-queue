@@ -14,8 +14,6 @@ public class WaitingQueueRegisterApiService {
     private final WaitingQueueReadService waitingQueueReadService;
 
     public WaitingQueueInfoResult registerWaitingQueue(long userId, long itemId) {
-        // todo 대기열 등록할 상품 상태 검증로직 추가하기
-
         final var waitingQueueToken = waitingQueueRegisterService.registerWaitingQueue(
             userId,
             itemId
