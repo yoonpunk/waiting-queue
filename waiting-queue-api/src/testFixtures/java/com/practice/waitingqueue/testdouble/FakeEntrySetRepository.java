@@ -12,13 +12,13 @@ import org.springframework.util.CollectionUtils;
 
 public class FakeEntrySetRepository implements EntrySetRepository {
 
-    private final Map<String, List<String>> waitingQueueStore = new HashMap<>();
+    private final Map<String, List<String>> entrySetStore = new HashMap<>();
 
     @Override
     public WaitingQueueToken save(long itemId, WaitingQueueToken waitingQueueToken) {
         final var entrySetKey = EntrySetKeyGenerator.generate(itemId);
 
-        waitingQueueStore.computeIfAbsent(entrySetKey, k -> new ArrayList<>())
+        entrySetStore.computeIfAbsent(entrySetKey, k -> new ArrayList<>())
             .add(waitingQueueToken.getValue());
 
         return waitingQueueToken;
@@ -40,10 +40,22 @@ public class FakeEntrySetRepository implements EntrySetRepository {
     }
 
     @Override
+    public Long countEntrySetTokenByItemId(long itemId) {
+        final var entrySetKey = EntrySetKeyGenerator.generate(itemId);
+        final var set = entrySetStore.getOrDefault(entrySetKey, null);
+
+        if (set == null) {
+            return 0L;
+        } else {
+            return (long) set.size();
+        }
+    }
+
+    @Override
     public boolean containsToken(long itemId, WaitingQueueToken waitingQueueToken) {
         final var entrySetKey = EntrySetKeyGenerator.generate(itemId);
 
-        final var tokens = waitingQueueStore.get(entrySetKey);
+        final var tokens = entrySetStore.get(entrySetKey);
 
         return tokens != null && tokens.contains(waitingQueueToken.getValue());
     }

@@ -9,5 +9,7 @@ public interface EntrySetRepository {
 
     List<WaitingQueueToken> saveAllByItemId(long itemId, List<WaitingQueueToken> waitingQueueTokenList);
 
+    Long countEntrySetTokenByItemId(long itemId);
+
     boolean containsToken(long itemId, WaitingQueueToken waitingQueueToken);
 }

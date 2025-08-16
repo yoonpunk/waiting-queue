@@ -2,9 +2,9 @@ package com.practice.waitingqueue.presentation.api.controller;
 
 import com.practice.waitingqueue.common.http.CommonResponse;
 import com.practice.waitingqueue.domain.service.MoveTokenFromWaitingQueueToEntrySetService;
-import com.practice.waitingqueue.domain.service.WaitingQueueMonitoringService;
-import com.practice.waitingqueue.presentation.api.dto.CurrentWaitingQueueListMonitorRequest;
-import com.practice.waitingqueue.presentation.api.dto.CurrentWaitingQueueListMonitorResponse;
+import com.practice.waitingqueue.domain.service.WaitingQueueTokenCountService;
+import com.practice.waitingqueue.presentation.api.dto.WaitingQueueTokenCountRequest;
+import com.practice.waitingqueue.presentation.api.dto.WaitingQueueTokenCountListResponse;
 import com.practice.waitingqueue.presentation.api.dto.TokenCountToMoveResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,9 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class WaitingQueueInternalAdminController {
 
     private final MoveTokenFromWaitingQueueToEntrySetService moveTokenFromWaitingQueueToEntrySetService;
-    private final WaitingQueueMonitoringService waitingQueueMonitoringService;
+    private final WaitingQueueTokenCountService waitingQueueTokenCountService;
 
-    @Operation(summary = "대기열에서 입장열로 옮겨가는 토큰 수를 조회합니다.")
+    @Operation(summary = "대기열에서 입장셋으로 옮겨가는 토큰 수를 조회합니다.")
     @GetMapping("/internal/admin/v1/waiting-queue/token-count-to-move")
     public CommonResponse<TokenCountToMoveResponse> getTokenCountToMove(
         @RequestHeader("user-id") final long userId
@@ -35,7 +35,7 @@ public class WaitingQueueInternalAdminController {
         return CommonResponse.success(TokenCountToMoveResponse.of(changedTokenCountToMove));
     }
 
-        @Operation(summary = "대기열에서 입장열로 옮겨가는 토큰 수를 변경합니다.")
+        @Operation(summary = "대기열에서 입장셋으로 옮겨가는 토큰 수를 변경합니다.")
     @PutMapping("/internal/admin/v1/waiting-queue/token-count-to-move")
     public CommonResponse<TokenCountToMoveResponse> changeTokenCountToMove(
         @RequestHeader("user-id") final long userId,
@@ -47,14 +47,14 @@ public class WaitingQueueInternalAdminController {
     }
 
     @Operation(summary = "현재 대기열의 토큰 수 상황을 모니터링 합니다.")
-    @PostMapping("/internal/admin/v1/waiting-queue/current")
-    public CommonResponse<CurrentWaitingQueueListMonitorResponse> monitorCurrentWaitingQueueList(
+    @PostMapping("/internal/admin/v1/waiting-queue/token-count")
+    public CommonResponse<WaitingQueueTokenCountListResponse> countWaitingQueueToken(
         @RequestHeader("user-id") final long userId,
-        @RequestBody CurrentWaitingQueueListMonitorRequest request
+        @RequestBody WaitingQueueTokenCountRequest request
     ) {
         final var criteria = request.toWaitingQueueMonitoringCriteria();
-        final var result = waitingQueueMonitoringService.monitorWaitingQueueList(criteria);
+        final var result = waitingQueueTokenCountService.countWaitingQueueToken(criteria);
 
-        return CommonResponse.success(CurrentWaitingQueueListMonitorResponse.of(result));
+        return CommonResponse.success(WaitingQueueTokenCountListResponse.of(result));
     }
 }

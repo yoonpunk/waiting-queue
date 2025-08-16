@@ -39,6 +39,12 @@ public class EntrySetRedisRepository implements EntrySetRepository {
     }
 
     @Override
+    public Long countEntrySetTokenByItemId(long itemId) {
+        final var entrySetKey = EntrySetKeyGenerator.generate(itemId);
+        return redisTemplate.opsForSet().size(entrySetKey);
+    }
+
+    @Override
     public boolean containsToken(long itemId, WaitingQueueToken waitingQueueToken) {
         final var entrySetKey = EntrySetKeyGenerator.generate(itemId);
         return redisTemplate.opsForSet().isMember(entrySetKey, waitingQueueToken.getValue());
