@@ -1,4 +1,4 @@
-package com.practice.waitingqueue.presentation.dto;
+package com.practice.waitingqueue.interfaces.dto;
 
 import com.practice.waitingqueue.domain.dto.WaitingItemSyncCommand;
 import lombok.AllArgsConstructor;

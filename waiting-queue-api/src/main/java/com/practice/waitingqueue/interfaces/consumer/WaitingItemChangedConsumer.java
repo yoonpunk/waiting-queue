@@ -1,7 +1,7 @@
-package com.practice.waitingqueue.presentation.consumer;
+package com.practice.waitingqueue.interfaces.consumer;
 
 import com.practice.waitingqueue.domain.service.WaitingItemSyncService;
-import com.practice.waitingqueue.presentation.dto.WaitingItemChangedMessage;
+import com.practice.waitingqueue.interfaces.dto.WaitingItemChangedMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

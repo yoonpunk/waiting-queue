@@ -1,4 +1,4 @@
-package com.practice.waitingqueue.presentation.scheduler;
+package com.practice.waitingqueue.interfaces.scheduler;
 
 import com.practice.waitingqueue.domain.service.MoveTokenFromWaitingQueueToEntrySetService;
 import lombok.Getter;

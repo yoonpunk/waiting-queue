@@ -1,4 +1,4 @@
-package com.practice.waitingqueue.presentation.dto;
+package com.practice.waitingqueue.interfaces.dto;
 
 import com.practice.waitingqueue.domain.entity.WaitingItem;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,6 +1,6 @@
 package com.practice.waitingqueue;
 
-import com.practice.waitingqueue.presentation.dto.WaitingQueueRegisterResponse;
+import com.practice.waitingqueue.interfaces.dto.WaitingQueueRegisterResponse;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

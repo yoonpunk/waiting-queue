@@ -1,11 +1,11 @@
-package com.practice.waitingqueue.presentation.controller;
+package com.practice.waitingqueue.interfaces.controller;
 
 import com.practice.waitingqueue.common.http.CommonResponse;
 import com.practice.waitingqueue.domain.service.MoveTokenFromWaitingQueueToEntrySetService;
 import com.practice.waitingqueue.domain.service.WaitingQueueTokenCountService;
-import com.practice.waitingqueue.presentation.dto.WaitingQueueTokenCountRequest;
-import com.practice.waitingqueue.presentation.dto.WaitingQueueTokenCountListResponse;
-import com.practice.waitingqueue.presentation.dto.TokenCountToMoveResponse;
+import com.practice.waitingqueue.interfaces.dto.TokenCountToMoveResponse;
+import com.practice.waitingqueue.interfaces.dto.WaitingQueueTokenCountListResponse;
+import com.practice.waitingqueue.interfaces.dto.WaitingQueueTokenCountRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.PositiveOrZero;
