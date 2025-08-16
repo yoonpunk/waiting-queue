@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,15 +27,16 @@ public class EntrySetRedisRepository implements EntrySetRepository {
         long itemId,
         List<WaitingQueueToken> waitingQueueTokenList
     ) {
+        if (CollectionUtils.isEmpty(waitingQueueTokenList)) {
+            return List.of();
+        }
+
         final var entrySetKey = EntrySetKeyGenerator.generate(itemId);
+        final var rawTokenList = waitingQueueTokenList.stream()
+            .map(WaitingQueueToken::getValue)
+            .toArray(String[]::new);
 
-        waitingQueueTokenList.forEach(
-            waitingQueueToken -> redisTemplate.opsForSet().add(
-                entrySetKey,
-                waitingQueueToken.getValue()
-            )
-        );
-
+        redisTemplate.opsForSet().add(entrySetKey, rawTokenList);
         return waitingQueueTokenList;
     }
 
