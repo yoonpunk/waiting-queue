@@ -84,6 +84,11 @@ public class WaitingQueueRedisRepository implements WaitingQueueRepository {
             .toList();
     }
 
+    @Override
+    public Long countWaitingQueueTokenByItemId(long itemId) {
+        return redisTemplate.opsForZSet().size(WaitingQueueKeyGenerator.generate(itemId));
+    }
+
     public void deleteWaitingQueueTokenListByItemId(
         long itemId,
         List<WaitingQueueToken> waitingQueueTokenList

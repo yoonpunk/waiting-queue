@@ -74,6 +74,18 @@ public class FakeWaitingQueueRepository implements WaitingQueueRepository {
     }
 
     @Override
+    public Long countWaitingQueueTokenByItemId(long itemId) {
+        final var waitingQueueKey = WaitingQueueKeyGenerator.generate(itemId);
+        final var queue = waitingQueueStore.getOrDefault(waitingQueueKey, null);
+
+        if (queue == null) {
+            return 0L;
+        } else {
+            return (long) queue.size();
+        }
+    }
+
+    @Override
     public void deleteWaitingQueueTokenListByItemId(
         long itemId,
         List<WaitingQueueToken> waitingQueueTokenList

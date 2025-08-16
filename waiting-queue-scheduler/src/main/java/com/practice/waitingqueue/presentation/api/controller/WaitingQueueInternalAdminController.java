@@ -2,13 +2,18 @@ package com.practice.waitingqueue.presentation.api.controller;
 
 import com.practice.waitingqueue.common.http.CommonResponse;
 import com.practice.waitingqueue.domain.service.MoveTokenFromWaitingQueueToEntrySetService;
+import com.practice.waitingqueue.domain.service.WaitingQueueMonitoringService;
+import com.practice.waitingqueue.presentation.api.dto.CurrentWaitingQueueListMonitorRequest;
+import com.practice.waitingqueue.presentation.api.dto.CurrentWaitingQueueListMonitorResponse;
 import com.practice.waitingqueue.presentation.api.dto.TokenCountToMoveResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class WaitingQueueInternalAdminController {
 
     private final MoveTokenFromWaitingQueueToEntrySetService moveTokenFromWaitingQueueToEntrySetService;
+    private final WaitingQueueMonitoringService waitingQueueMonitoringService;
 
     @Operation(summary = "대기열에서 입장열로 옮겨가는 토큰 수를 조회합니다.")
     @GetMapping("/internal/admin/v1/waiting-queue/token-count-to-move")
@@ -38,5 +44,17 @@ public class WaitingQueueInternalAdminController {
         moveTokenFromWaitingQueueToEntrySetService.setTokenCountToMove(tokenCountToMove);
         final var changedTokenCountToMove = moveTokenFromWaitingQueueToEntrySetService.getTokenCountToMove();
         return CommonResponse.success(TokenCountToMoveResponse.of(changedTokenCountToMove));
+    }
+
+    @Operation(summary = "현재 대기열의 토큰 수 상황을 모니터링 합니다.")
+    @PostMapping("/internal/admin/v1/waiting-queue/current")
+    public CommonResponse<CurrentWaitingQueueListMonitorResponse> monitorCurrentWaitingQueueList(
+        @RequestHeader("user-id") final long userId,
+        @RequestBody CurrentWaitingQueueListMonitorRequest request
+    ) {
+        final var criteria = request.toWaitingQueueMonitoringCriteria();
+        final var result = waitingQueueMonitoringService.monitorWaitingQueueList(criteria);
+
+        return CommonResponse.success(CurrentWaitingQueueListMonitorResponse.of(result));
     }
 }

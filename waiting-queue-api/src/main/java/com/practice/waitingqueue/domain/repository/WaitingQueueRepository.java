@@ -19,5 +19,7 @@ public interface WaitingQueueRepository {
 
     List<WaitingQueueToken> findTopRankedWaitingQueueTokenListByItem(long itemId, int rank);
 
+    Long countWaitingQueueTokenByItemId(long itemId);
+
     void deleteWaitingQueueTokenListByItemId(long itemId, List<WaitingQueueToken> waitingQueueTokenList);
 }
