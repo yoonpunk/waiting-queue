@@ -35,7 +35,7 @@ public class WaitingQueueInternalAdminController {
         return CommonResponse.success(TokenCountToMoveResponse.of(changedTokenCountToMove));
     }
 
-        @Operation(summary = "대기열에서 입장셋으로 옮겨가는 토큰 수를 변경합니다.")
+    @Operation(summary = "대기열에서 입장셋으로 옮겨가는 토큰 수를 변경합니다.")
     @PutMapping("/internal/admin/v1/waiting-queue/token-count-to-move")
     public CommonResponse<TokenCountToMoveResponse> changeTokenCountToMove(
         @RequestHeader("user-id") final long userId,
