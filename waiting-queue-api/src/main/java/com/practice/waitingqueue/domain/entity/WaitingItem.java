@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@AllArgsConstructor(staticName = "of")
+@AllArgsConstructor
 @ToString
 public class WaitingItem {
     private final long itemId;                 // 상품 고유번호
@@ -13,6 +13,14 @@ public class WaitingItem {
     private int remainCount;                   // 재고수량
     private boolean waitingQueueEnabled;       // 대기열 사용이 활성화 되었는 지 여부 (true: 활성화, false: 비활성화)
 
+    public static WaitingItem of(
+        long itemId,
+        String itemName,
+        int remainCount,
+        boolean waitingQueueEnabled
+    ) {
+        return new WaitingItem(itemId, itemName, remainCount, waitingQueueEnabled);
+    }
     public boolean cannotUseWaitingQueue() {
         return !this.waitingQueueEnabled || remainCount <= 0;
     }
