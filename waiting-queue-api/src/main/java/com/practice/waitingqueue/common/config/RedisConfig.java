@@ -6,28 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
-
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory cf) {
-        var template = new RedisTemplate<String, Object>();
-        template.setConnectionFactory(cf);
-
-        var keySer = new StringRedisSerializer();
-        var valueSer = new GenericJackson2JsonRedisSerializer();
-
-        template.setKeySerializer(keySer);
-        template.setHashKeySerializer(keySer);
-        template.setValueSerializer(valueSer);
-        template.setHashValueSerializer(valueSer);
-
-        template.afterPropertiesSet();
-        return template;
-    }
 
     @Bean
     public RedisTemplate<String, WaitingItem> waitingItemRedisTemplate(RedisConnectionFactory cf) {
@@ -35,7 +18,7 @@ public class RedisConfig {
         template.setConnectionFactory(cf);
 
         var keySer = new StringRedisSerializer();
-        var valueSer = new GenericJackson2JsonRedisSerializer();
+        var valueSer = new Jackson2JsonRedisSerializer<>(WaitingItem.class);
 
         template.setKeySerializer(keySer);
         template.setHashKeySerializer(keySer);
