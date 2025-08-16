@@ -1,11 +1,13 @@
 package com.practice.waitingqueue.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@AllArgsConstructor
+@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 @ToString
 public class WaitingItem {
     private final long itemId;                 // 상품 고유번호
@@ -13,11 +15,12 @@ public class WaitingItem {
     private int remainCount;                   // 재고수량
     private boolean waitingQueueEnabled;       // 대기열 사용이 활성화 되었는 지 여부 (true: 활성화, false: 비활성화)
 
+    @JsonCreator
     public static WaitingItem of(
-        long itemId,
-        String itemName,
-        int remainCount,
-        boolean waitingQueueEnabled
+        @JsonProperty("itemId") long itemId,
+        @JsonProperty("itemName") String itemName,
+        @JsonProperty("remainCount") int remainCount,
+        @JsonProperty("waitingQueueEnabled") boolean waitingQueueEnabled
     ) {
         return new WaitingItem(itemId, itemName, remainCount, waitingQueueEnabled);
     }

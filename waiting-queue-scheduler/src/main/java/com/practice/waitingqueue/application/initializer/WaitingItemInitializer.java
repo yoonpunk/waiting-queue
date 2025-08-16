@@ -29,7 +29,7 @@ public class WaitingItemInitializer {
     private final WaitingItemSyncService waitingItemSyncService;
     @EventListener(ApplicationReadyEvent.class)
     public void initialize() {
-        if (!needToInitialize) {
+        if (needToInitialize == null || !needToInitialize) {
             log.info("[WaitingItemInitializer] Waiting item initialization is not needed.");
             return;
         }

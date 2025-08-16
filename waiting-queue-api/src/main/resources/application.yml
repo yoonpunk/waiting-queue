@@ -1,6 +1,8 @@
 spring:
   application:
     name: waiting-queue-api
+  server:
+    port: 8080 # 로컬 실행을 위해 포트 번호는 waiting-queue-scheduler와 다르게 설정
   data:
     redis:
       host: localhost
@@ -21,3 +23,9 @@ springdoc:
     path: /v3/api-docs
   swagger-ui:
     path: /swagger-ui.html
+
+waiting-queue:
+  warm-up:
+    enabled: true # 웜업 기능 활성화 여부
+    request_count_per_item: 20 # 웜업을 진행할 상품당 요청 수
+    item-ids: 11111, 22222, 33333, 44444, 55555, 66666, 77777, 88888 # 웜업을 진행할 실제 대기열 상품 ID 목록
