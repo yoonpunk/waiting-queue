@@ -19,21 +19,15 @@ public class WaitingItemRedisRepository implements WaitingItemRepository {
             throw new IllegalArgumentException("waitingItem must not be null");
         }
 
-        String key = String.valueOf(waitingItem.getItemId());
+        String key = WaitingItemKeyGenerator.generate(waitingItem.getItemId());
         redisTemplate.opsForValue().set(key, waitingItem);
         return waitingItem;
     }
 
     @Override
     public Optional<WaitingItem> findByItemId(long itemId) {
-        String key = String.valueOf(itemId);
+        String key = WaitingItemKeyGenerator.generate(itemId);
         final var waitingItem = redisTemplate.opsForValue().get(key);
-
-        if (waitingItem == null) {
-            return Optional.empty();
-        } else {
-            return Optional.of(redisTemplate.opsForValue().get(key));
-        }
-
+        return Optional.ofNullable(waitingItem);
     }
 }
