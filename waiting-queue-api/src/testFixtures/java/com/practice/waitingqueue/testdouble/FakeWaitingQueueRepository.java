@@ -67,6 +67,10 @@ public class FakeWaitingQueueRepository implements WaitingQueueRepository {
 
     @Override
     public List<WaitingQueueToken> findTopRankedWaitingQueueTokenListByItem(long itemId, int rank) {
+        if (rank <= 0) {
+            return List.of();
+        }
+
         return waitingQueueStore.get(WaitingQueueKeyGenerator.generate(itemId)).stream()
             .limit(rank)
             .map(entry -> entry.waitingQueueToken)

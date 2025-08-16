@@ -38,6 +38,11 @@ public class MoveTokenFromWaitingQueueToEntrySetService {
 
     public void moveWaitingQueueTokens() {
         log.info("[MoveTokenFromWaitingQueueToEntrySetService] start moving tokens from waiting queue to entry set. tokenCountToMove={}", tokenCountToMove);
+        if (tokenCountToMove == 0) {
+            log.info("[MoveTokenFromWaitingQueueToEntrySetService] tokenCountToMove is 0, skipping token movement.");
+            return;
+        }
+
         final var queueingItemIdList = waitingQueueRepository.findAllQueueingItemIdList();
 
         queueingItemIdList.forEach(
