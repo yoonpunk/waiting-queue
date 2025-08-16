@@ -1,22 +1,38 @@
 package com.practice.waitingqueue.domain.exception;
 
+import com.practice.waitingqueue.common.exception.CommonException;
+import com.practice.waitingqueue.common.exception.LogLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-public class WaitingQueueRegisterFailedException extends RuntimeException {
+public class WaitingQueueRegisterFailedException extends CommonException {
+
+    private final static LogLevel DEFAULT_LOG_LEVEL = LogLevel.INFO;
 
     private final Long itemId;
     private final ErrorCode errorCode;
 
     public WaitingQueueRegisterFailedException(Long itemId, ErrorCode errorCode) {
-        super(errorCode.message);
+        super(errorCode.message, DEFAULT_LOG_LEVEL);
         this.errorCode = errorCode;
         this.itemId = itemId;
     }
 
     public WaitingQueueRegisterFailedException(Long itemId, ErrorCode errorCode, Throwable cause) {
-        super(errorCode.message, cause);
+        super(errorCode.message, cause, DEFAULT_LOG_LEVEL);
+        this.errorCode = errorCode;
+        this.itemId = itemId;
+    }
+
+    public WaitingQueueRegisterFailedException(Long itemId, ErrorCode errorCode, LogLevel logLevel) {
+        super(errorCode.message, logLevel);
+        this.errorCode = errorCode;
+        this.itemId = itemId;
+    }
+
+    public WaitingQueueRegisterFailedException(Long itemId, ErrorCode errorCode, Throwable cause, LogLevel logLevel) {
+        super(errorCode.message, cause, logLevel);
         this.errorCode = errorCode;
         this.itemId = itemId;
     }

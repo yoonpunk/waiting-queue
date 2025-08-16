@@ -1,5 +1,6 @@
 package com.practice.waitingqueue.domain.validator;
 
+import com.practice.waitingqueue.common.exception.LogLevel;
 import com.practice.waitingqueue.domain.exception.WaitingQueueRegisterFailedException;
 import com.practice.waitingqueue.domain.exception.WaitingQueueRegisterFailedException.ErrorCode;
 import com.practice.waitingqueue.domain.repository.WaitingItemRepository;
@@ -15,12 +16,14 @@ public class WaitingQueueRegisterValidator {
     public void validateItemIdCanUseWaitingQueue(long itemId) {
         final var waitingItem = waitingItemRepository.findByItemId(itemId)
             .orElseThrow(() -> new WaitingQueueRegisterFailedException(
-                itemId, ErrorCode.ITEM_CANNOT_USE_WAITING_QUEUE
+                itemId, ErrorCode.ITEM_CANNOT_USE_WAITING_QUEUE, LogLevel.ERROR
             ));
 
 
         if (waitingItem.cannotUseWaitingQueue()) {
-            throw new WaitingQueueRegisterFailedException(itemId, ErrorCode.ITEM_CANNOT_USE_WAITING_QUEUE);
+            throw new WaitingQueueRegisterFailedException(
+                itemId, ErrorCode.ITEM_CANNOT_USE_WAITING_QUEUE, LogLevel.INFO
+            );
         }
     }
 }
