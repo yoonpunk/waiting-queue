@@ -1,4 +1,4 @@
-package com.practice.waitingqueue.presentation.api.dto;
+package com.practice.waitingqueue.presentation.dto;
 
 import com.practice.waitingqueue.domain.dto.WaitingQueueTokenCountCriteria;
 import io.swagger.v3.oas.annotations.media.Schema;

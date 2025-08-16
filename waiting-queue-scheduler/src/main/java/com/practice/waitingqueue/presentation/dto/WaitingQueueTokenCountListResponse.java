@@ -1,4 +1,4 @@
-package com.practice.waitingqueue.presentation.api.dto;
+package com.practice.waitingqueue.presentation.dto;
 
 import com.practice.waitingqueue.domain.info.WaitingQueueTokenCountInfo;
 import com.practice.waitingqueue.domain.info.WaitingQueueTokenCountInfoList;

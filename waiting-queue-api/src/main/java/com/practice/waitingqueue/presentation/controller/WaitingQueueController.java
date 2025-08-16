@@ -1,10 +1,10 @@
-package com.practice.waitingqueue.presentation.api.controller;
+package com.practice.waitingqueue.presentation.controller;
 
 import com.practice.waitingqueue.application.service.WaitingQueueReadApiService;
 import com.practice.waitingqueue.application.service.WaitingQueueRegisterApiService;
 import com.practice.waitingqueue.common.http.CommonResponse;
-import com.practice.waitingqueue.presentation.api.dto.WaitingQueueGetResponse;
-import com.practice.waitingqueue.presentation.api.dto.WaitingQueueRegisterResponse;
+import com.practice.waitingqueue.presentation.dto.WaitingQueueGetResponse;
+import com.practice.waitingqueue.presentation.dto.WaitingQueueRegisterResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

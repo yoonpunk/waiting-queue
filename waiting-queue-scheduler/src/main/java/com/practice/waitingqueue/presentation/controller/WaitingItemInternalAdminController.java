@@ -1,9 +1,9 @@
-package com.practice.waitingqueue.presentation.api.controller;
+package com.practice.waitingqueue.presentation.controller;
 
 import com.practice.waitingqueue.common.http.CommonResponse;
 import com.practice.waitingqueue.domain.service.WaitingItemSyncService;
-import com.practice.waitingqueue.presentation.api.dto.WaitingItemCreateOrUpdateRequest;
-import com.practice.waitingqueue.presentation.api.dto.WaitingItemCreateOrUpdateResponse;
+import com.practice.waitingqueue.presentation.dto.WaitingItemCreateOrUpdateRequest;
+import com.practice.waitingqueue.presentation.dto.WaitingItemCreateOrUpdateResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

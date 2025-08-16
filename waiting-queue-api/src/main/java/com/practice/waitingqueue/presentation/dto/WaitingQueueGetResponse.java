@@ -1,4 +1,4 @@
-package com.practice.waitingqueue.presentation.api.dto;
+package com.practice.waitingqueue.presentation.dto;
 
 import com.practice.waitingqueue.application.dto.WaitingQueueInfoResult;
 import io.swagger.v3.oas.annotations.media.Schema;
