@@ -43,6 +43,7 @@ class MoveTokenFromWaitingQueueToEntrySetServiceTest {
         waitingQueueRepository.save(itemId2, item2Token3, System.currentTimeMillis());
 
         final var sut = new MoveTokenFromWaitingQueueToEntrySetService(waitingQueueRepository, entrySetRepository);
+        sut.setTokenCountToMove(3);
 
         // when
         sut.moveWaitingQueueTokens();
@@ -61,8 +62,8 @@ class MoveTokenFromWaitingQueueToEntrySetServiceTest {
         assertThat(waitingQueueRepository.findByItemIdAndWaitingQueueToken(itemId1, item1Token2)).isEmpty();
         assertThat(waitingQueueRepository.findByItemIdAndWaitingQueueToken(itemId1, item1Token3)).isEmpty();
 
-        assertThat(waitingQueueRepository.findByItemIdAndWaitingQueueToken(itemId2, item1Token1)).isEmpty();
-        assertThat(waitingQueueRepository.findByItemIdAndWaitingQueueToken(itemId2, item1Token2)).isEmpty();
-        assertThat(waitingQueueRepository.findByItemIdAndWaitingQueueToken(itemId2, item1Token3)).isEmpty();
+        assertThat(waitingQueueRepository.findByItemIdAndWaitingQueueToken(itemId2, item2Token1)).isEmpty();
+        assertThat(waitingQueueRepository.findByItemIdAndWaitingQueueToken(itemId2, item2Token2)).isEmpty();
+        assertThat(waitingQueueRepository.findByItemIdAndWaitingQueueToken(itemId2, item2Token3)).isEmpty();
     }
 }
